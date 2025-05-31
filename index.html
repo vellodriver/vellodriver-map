@@ -5,21 +5,6 @@
   let marker;
   let userLocation = [0, 0];
 
-  function createCustomMarker() {
-    const el = document.createElement('div');
-    el.innerHTML = `
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 18 18" width="36" height="36" fill="#0a3d62">
-        <path d="M15.92 8.004l-1.071-3.75c-.297-1.041-1.25-1.754-2.332-1.754H5.485c-1.082 0-2.035.713-2.332 1.754L2.082 8.003A2.26 2.26 0 001 9.997v4.007a1 1 0 001 1h1a1 1 0 001-1v-1h10v1a1 1 0 001 1h1a1 1 0 001-1v-4.007c0-.802-.478-1.536-1.08-1.993zm-9.786-3.17h5.731c.243 0 .455.16.521.392l.732 2.553H4.882l.732-2.553a.558.558 0 01.521-.392zM4.5 12a1.5 1.5 0 110-3 1.5 1.5 0 010 3zm9 0a1.5 1.5 0 110-3 1.5 1.5 0 010 3z"/>
-      </svg>
-    `;
-    el.style.display = 'flex';
-    el.style.alignItems = 'center';
-    el.style.justifyContent = 'center';
-    el.style.width = '36px';
-    el.style.height = '36px';
-    return el;
-  }
-
   function updateMap(position) {
     userLocation = [position.coords.longitude, position.coords.latitude];
 
@@ -39,13 +24,13 @@
 
       map.getCanvas().style.cursor = 'default';
 
-      marker = new mapboxgl.Marker({ element: createCustomMarker() })
+      marker = new mapboxgl.Marker({ color: 'red' })
         .setLngLat(userLocation)
         .setPopup(new mapboxgl.Popup().setText('Você está aqui!'))
         .addTo(map);
     } else {
       marker.setLngLat(userLocation);
-      map.flyTo({ center: userLocation });
+      map.flyTo({ center: userLocation }); // sem alterar o zoom
     }
   }
 
