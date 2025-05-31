@@ -22,15 +22,17 @@
         keyboard: false
       });
 
+      // Desativa o cursor de "mão" ao passar sobre o mapa
       map.getCanvas().style.cursor = 'default';
 
+      // Cria marcador
       marker = new mapboxgl.Marker({ color: 'red' })
         .setLngLat(userLocation)
         .setPopup(new mapboxgl.Popup().setText('Você está aqui!'))
         .addTo(map);
     } else {
       marker.setLngLat(userLocation);
-      map.flyTo({ center: userLocation }); // sem alterar o zoom
+      map.flyTo({ center: userLocation, zoom: 15 });
     }
   }
 
