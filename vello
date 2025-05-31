@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>Minha Localização</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    body, html {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+    }
+    #map {
+      width: 100%;
+      height: 100%;
+    }
+    .mapboxgl-ctrl-top-right {
+      top: 10px;
+      right: 10px;
+    }
+    #centerButton {
+      position: absolute;
+      top: 80px;
+      right: 10px;
+      z-index: 1;
+      background: white;
+      border: none;
+      padding: 10px;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+      cursor: pointer;
+    }
+  </style>
+  <link href="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css" rel="stylesheet" />
+</head>
+<body>
+  <div id="map"></div>
+  <button id="centerButton">Centralizar</button>
+
+  <script src="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js"></script>
+  <script>
+    mapboxgl.accessToken = 'pk.eyJ1IjoidmVsbG9kcml2ZXIiLCJhIjoiY21iMGc2azhiMHcyNDJrcTJrN3F3dnp1bSJ9.A6iU7GA4IixnaTbhJPe9hQ';
+
+    let map;
+    let userLocation;
+    let marker;
+
+    function initializeMap(position) {
+      userLocation = [position.coords.longitude, position.coords.latitude];
+
+      map = new mapboxgl.Map({
+        container: 'map',
+        style: 'mapbox://styles/mapbox/streets-v12',
+        center: userLocation,
+        zoom: 15
+      });
+
+      // Controles de zoom
+      map.addControl(new mapboxgl.NavigationControl(), 'top-right');
+
+      // Adiciona marcador
+      marker = new mapboxgl.Marker({ color: 'red' })
+        .setLngLat(userLocation)
+        .setPopup(new mapboxgl.Popup().setText('Você está aqui!'))
+        .addTo(map);
+    }
+
+    function centerMap() {
+      if (userLocation && map) {
+        map.flyTo({ center: userLocation, zoom: 15 });
+      }
+    }
+
+    document.getElementById('centerButton').addEventListener('click', centerMap);
+
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        initializeMap,
+        () => alert('Não foi possível acessar sua localização.')
+      );
+    } else {
+      alert('Geolocalização não é suportada neste navegador.');
+    }
+  </script>
+</body>
+</html>
